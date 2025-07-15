@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 HPMicro
+ * Copyright (c) 2023-2025 HPMicro
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -81,8 +81,13 @@ static int flash_hpmicro_erase(const struct device *dev, off_t offset,
         while (1) {
         }
     }
-    status = rom_xpi_nor_erase(BOARD_APP_XPI_NOR_XPI_BASE, xpi_xfer_channel_auto, &s_xpi_nor_config,
-                               offset, size);
+    for (int i = 0; i < size; i += (s_xpi_nor_config.device_info.sector_size_kbytes * 1024)) {
+        status = rom_xpi_nor_erase_sector(BOARD_APP_XPI_NOR_XPI_BASE, xpi_xfer_channel_auto, &s_xpi_nor_config,
+                                   offset + i);
+        if (status != status_success) {
+            break;
+        }
+    }
     return HPM_STATUS_ZEPHYR_RET(status);
 }
 

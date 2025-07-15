@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 HPMicro
+ * Copyright (c) 2023-2025 HPMicro
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -20,7 +20,7 @@
 #define BOOTLOADER_SIZE CONFIG_BOOTLOADER_SIZE
 extern struct device hpm_flash_controller;
 
-#ifdef BUILD_TYPE_MCUBOOTAPP
+#ifdef PROJECT_TYPE_APP
 __attribute__ ((section(".mcuboot_app_header"))) const uint8_t app_head[0x200] = {0x00};
 #endif
 const struct flash_area default_flash_map[] = {
@@ -28,24 +28,24 @@ const struct flash_area default_flash_map[] = {
         .fa_id = FLASH_AREA_IMAGE_PRIMARY(0),
         .fa_device_id = 0,
         .pad16 = 1,
-        .fa_off = IMAGE0_PRIMARY_START_ADDRESS,
-        .fa_size = APPLICATION_SIZE,
+        .fa_off = MCUBOOT_IMAGE0_PRIMARY_START_ADDRESS,
+        .fa_size = MCUBOOT_APPLICATION_SIZE,
         .fa_dev = &hpm_flash_controller,
     },
     {
         .fa_id = FLASH_AREA_IMAGE_SECONDARY(0),
         .fa_device_id = 0,
         .pad16 = 1,
-        .fa_off = IMAGE0_SECONDARY_START_ADDRESS,
-        .fa_size = APPLICATION_SIZE,
+        .fa_off = MCUBOOT_IMAGE0_SECONDARY_START_ADDRESS,
+        .fa_size = MCUBOOT_APPLICATION_SIZE,
         .fa_dev = &hpm_flash_controller,
     },
     {
         .fa_id = FLASH_AREA_IMAGE_SCRATCH,
         .fa_device_id = 0,
         .pad16 = 1,
-        .fa_off = SCRATCH_OFFSET,
-        .fa_size = SCRATCH_SIZE,
+        .fa_off = MCUBOOT_SCRATCH_OFFSET,
+        .fa_size = MCUBOOT_SCRATCH_SIZE,
         .fa_dev = &hpm_flash_controller,
     },
 };

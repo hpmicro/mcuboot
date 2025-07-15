@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 HPMicro
+ * Copyright (c) 2023-2025 HPMicro
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -13,11 +13,13 @@
 
 #define CONFIG_BOOT_VALIDATE_SLOT0 1
 
-#define CONFIG_BOOT_MAX_IMG_SECTORS 128
+#define CONFIG_BOOT_MAX_IMG_SECTORS 512
 
 #define CONFIG_LOG   1
 
 #define CONFIG_BOOT_VALIDATE_SLOT0_ONCE 1
+
+#define CONFIG_MCUBOOT_DOWNGRADE_PREVENTION  1
 
 #ifndef MCUBOOT_LOG_LEVEL
 #define MCUBOOT_LOG_LEVEL MCUBOOT_LOG_LEVEL_INFO

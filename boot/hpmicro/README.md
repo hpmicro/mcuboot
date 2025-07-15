@@ -16,6 +16,9 @@ This example uses the board's default configuration, you can change the config t
 1. See `hpm_sdk`'s `README` for environment setup
 2. Setup mcuboot's `README`
 
+## Board flash map config
+See files in `boot\hpmicro\port\boards`
+
 ## Using the code example
 This document expects you to be familiar with MCUboot and its concepts. See [MCUboot documentation](https://github.com/mcu-tools/mcuboot) to learn more.
 
@@ -29,6 +32,10 @@ This example bundles two applications - the bootloader and the hello_world app. 
 
 ### how to download app to flash
 It has many ways to download app to flash. Ex: openocd for ft2232, jlink, mcu app.
+#### use start_gui on windows
+![start_gui flash](./doc/start_gui_write_bin.png)
+
+#### use telnet and openocd
 For board hpm6750evk, it is easy to use onboard ft2232, for more detail, See hpm_sdk's `README`:
 1. openocd -f ${path_soc_config} -f ${path_ft2232_config} -f ${path_board_config}
 2. start `cmd` console
@@ -51,18 +58,17 @@ a concrete example:
 1. setup build env, see hpm_sdk's `README` for detail
 2. cd boot/hpmicro/bootloader
 3. md build&cd build
-4. cmake -GNinja -DBOARD=hpm6750evk -DCMAKE_BUILD_TYPE=flash_xip ..
+4. cmake -GNinja -DBOARD=hpm6750evk2 -DHPM_BUILD_TYPE=flash_xip ..
 5. ninja
 
 ### build hello_world in bootmode
 1. setup build env, see hpm_sdk's `README` for detail
 2. cd boot/hpmicro/hello_world
 3. md build&cd build
-4. cmake -GNinja -DBOARD=hpm6750evk -DCMAKE_BUILD_TYPE=bootmode ..
+4. cmake -GNinja -DBOARD=hpm6750evk2 -DHPM_BUILD_TYPE=flash_xip ..
 5. ninja
 6. start `cmd` console
-7. python ${path to imgtool.py} sign --header-size 0x200 --align 8 --version 1.0 --slot-size 0x180000 ${path to orign bin file} ${path to output file}
-8. Flash app to flash. (`ADDRESS=0x80043000`, `SIZE=0x180000`, `OFFSET=0x43000`). See [how to download app to flash].
+7. Flash app to flash. (`ADDRESS=0x80043000`, `SIZE=0x180000`, `OFFSET=0x43000`). See [how to download app to flash].
 
 ### build hello_world in upgrade mode
 1. setup build env, see hpm_sdk's `README` for detail
@@ -71,5 +77,4 @@ a concrete example:
 4. cmake -GNinja -DBOARD=hpm6750evk -DCMAKE_BUILD_TYPE=upgrade ..
 5. ninja
 6. start `cmd` console
-7. python ${path to imgtool.py} sign --header-size 0x200 --align 8 --version 1.1 --slot-size 0x180000 --pad ${path to orign bin file} ${path to output file}
-8. Flash app to flash. (`ADDRESS=0x801C3000`, `SIZE=0x180000`, `OFFSET=0x1C3000`). See [how to download app to flash].
+7. Flash app to flash. (`ADDRESS=0x801C3000`, `SIZE=0x180000`, `OFFSET=0x1C3000`). See [how to download app to flash]

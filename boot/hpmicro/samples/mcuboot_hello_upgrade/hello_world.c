@@ -40,8 +40,8 @@ int main(void)
     }
     if (image_ok == 1) {
         printf("image upgrade is permanent\n");
-    } else {
-        printf("image ok is %d\n", image_ok);
+    } else if (image_ok == 3) {
+        printf("image_ok is not set\n");
         printf("press button to write image ok flag so that the upgrade process will be permanent, otherwise bootloader will revert the upgrade process at next reboot.\r\n");
         while(1) {
             if (gpio_read_pin(BOARD_APP_GPIO_CTRL, BOARD_APP_GPIO_INDEX, BOARD_APP_GPIO_PIN) == BOARD_BUTTON_PRESSED_VALUE)
@@ -50,6 +50,8 @@ int main(void)
         printf("writing image ok flag to flash, if failed revert proccess will run at next reboot\n");
         swap_set_image_ok(0);
         printf("written image ok flag success, next reboot upgrade will be permanent\n");
+    } else {
+        printf("image_ok flag is wrong, please check whether bootloader and app use same version of bootutil\n");
     }
     return 0;
 }

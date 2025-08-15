@@ -26,6 +26,7 @@
 #include <zephyr/usb/usb_device.h>
 #include <soc.h>
 #include <zephyr/linker/linker-defs.h>
+#include "hpm_l1c_drv.h"
 
 #if defined(CONFIG_BOOT_DISABLE_CACHES)
 #include <zephyr/cache.h>
@@ -239,7 +240,7 @@ static void do_boot(struct boot_rsp *rsp)
     ((void (*)(void))vt->reset)();
 }
 
-#elif defined(CONFIG_XTENSA) || defined(CONFIG_RISCV)
+#elif defined(CONFIG_XTENSA) || (defined(CONFIG_RISCV) && !defined(CONFIG_SOC_FAMILY_HPM) )
 
 #ifndef CONFIG_SOC_FAMILY_ESPRESSIF_ESP32
 
@@ -306,6 +307,7 @@ static void do_boot(struct boot_rsp *rsp)
 {
     void *start;
 
+    l1c_fence_i();
 #if defined(MCUBOOT_RAM_LOAD)
     start = (void *)(rsp->br_hdr->ih_load_addr + rsp->br_hdr->ih_hdr_size);
 #else
@@ -318,6 +320,8 @@ static void do_boot(struct boot_rsp *rsp)
     start = (void *)(flash_base + rsp->br_image_off +
                      rsp->br_hdr->ih_hdr_size);
 #endif
+    l1c_dc_flush_all();
+    l1c_dc_disable();
 
     /* Lock interrupts and dive into the entry point */
     irq_lock();

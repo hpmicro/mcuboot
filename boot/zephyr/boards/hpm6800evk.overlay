@@ -1,0 +1,13 @@
+/*
+ * Copyright 2025 HPMicro
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	aliases {
+		mcuboot-led0 = &led_r;
+	};
+	chosen {
+		zephyr,sram = &sram;
+	};
+};
